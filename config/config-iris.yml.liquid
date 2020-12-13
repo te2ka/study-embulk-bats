@@ -1,0 +1,33 @@
+{% include 'common/exec' %}
+in:
+  {% if env.mode == 'prod' %}
+    {% include 'common/in', file_prefix: 'iris' %}
+  {% elsif env.mode == 'test' %}
+    {% include 'common/in_test', dir: 'iris' %}
+  {% endif %}
+  parser:
+    charset: UTF-8
+    newline: LF
+    type: csv
+    delimiter: ','
+    quote: '"'
+    escape: '"'
+    trim_if_not_quoted: false
+    skip_header_lines: 1
+    allow_extra_columns: false
+    allow_optional_columns: false
+    columns:
+    - {name: sepal.length, type: double}
+    - {name: sepal.width, type: double}
+    - {name: petal.length, type: double}
+    - {name: petal.width, type: string}
+    - {name: variety, type: string}
+out:
+  {% if env.mode == 'prod' %}
+    {% include 'common/out', dir: 'iris', file_prefix: 'iris' %}
+  {% elsif env.mode == 'test' %}
+    {% include 'common/out_test', dir: 'iris', file_prefix: 'iris' %}
+  {% endif %}
+  file_ext: csv
+  formatter:
+    type: csv
